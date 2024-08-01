@@ -94,10 +94,10 @@ select PRECINCT, PRICINCT_CALL,
 
 --¹ê§@½m²ß4-4
 select vo.VALLEY, bu.BUILDING_ADDRESS, bu.CAPACITY, ps.PRECINCT, ps.PRICINCT_CALL
- from VALLEY_OFFICE vo
- inner join BUILDING bu
+ from BUILDING bu
+ left join VALLEY_OFFICE vo
  on vo.SERIAL_NUMBER = bu.VALLEY_SORT
- inner join POLICE_STATION ps
+ left join POLICE_STATION ps
  on bu.POLICE_SORT = ps.SERIAL_NUMBER
  where bu.BUILDING_ADDRESS LIKE '%¤¤%';
 
