@@ -1,25 +1,25 @@
 --實作練習2
-create table EDU_student.POLICE_STATION(
+create table POLICE_STATION(
  SERIAL_NUMBER VARCHAR2(10BYTE) primary key,
  PRECINCT NVARCHAR2(30),
  PRICINCT_ADDRESS NVARCHAR2(30),
  PRICINCT_ADDRESS NVARCHAR2(50),
  PRICINCT_CALL VARCHAR2(10 BYTE));
 
- create table EDU_student.VALLEY_OFFICE(
+ create table VALLEY_OFFICE(
  SERIAL_NUMBER VARCHAR2(10BYTE) primary key,
  VALLEY NVARCHAR2(30),
  OFFICE_ADDRESS NVARCHAR2(30),
  OFFICE_ADDRESS NVARCHAR2(50),
  OFFICE_CALL VARCHAR2(10BYTE));
 
-create table EDU_student.BUILDING_TYPE(
+create table BUILDING_TYPE(
  SERIAL_NUMBER VARCHAR2(10BYTE) primary key,
  TYPE NVARCHAR2(30));
  
- alter table EDU_student.BUILDING_TYPE rename column TYPE to B_TYPE; 
+ alter table BUILDING_TYPE rename column TYPE to B_TYPE; 
 
-create table EDU_student.BUILDING(
+create table BUILDING(
  SERIAL_NUMBER NUMBER(2,0) primary key,
  BUILDING_ADDRESS NVARCHAR2(30),
  BUILDING_ADDRESS NVARCHAR2(50),
@@ -29,7 +29,7 @@ create table EDU_student.BUILDING(
  POLICE_SORT VARCHAR2(10BYTE) references POLICE_STATION(SERIAL_NUMBER),
  VALLEY_SORT VARCHAR2(10BYTE) references VALLEY_OFFICE(SERIAL_NUMBER));
  
- alter table EDU_student.BUILDING rename column CAPACITY to ACCOMMODATE; 
+ alter table BUILDING rename column CAPACITY to ACCOMMODATE; 
  
 --實作練習3
 insert into POLICE_STATION 
@@ -67,16 +67,16 @@ insert all into BUILDING values('1','苗栗縣竹南鎮中埔街20號','100','1','A001','M
            into BUILDING values('12','苗栗縣頭份市信義里中正路116號','78','1','A004','M003','C008')select 1 from dual;
 --實作練習4-1
 select PRECINCT, PRICINCT_CALL
- from BUILDING BU
- left join POLICE_STATION PS
+ from EDU_student.BUILDING BU
+ left join EDU_student.POLICE_STATION PS
  on PS.SERIAL_NUMBER = BU.POLICE_SORT
  where BU.ACCOMMODATE > 1000;
  
 --實作練習4-2
 select PRECINCT, PRICINCT_CALL,
        count(PRECINCT)over(partition by PRECINCT)as CNT
- from BUILDING BU
- left join POLICE_STATION PS
+ from EDU_student.BUILDING BU
+ left join EDU_student.POLICE_STATION PS
  on PS.SERIAL_NUMBER = BU.POLICE_SORT
  where BU.ACCOMMODATE > 1000;
 --實作練習4-3
@@ -84,26 +84,26 @@ select PRECINCT, PRICINCT_CALL,
        count(PRECINCT)over(partition by PRECINCT)as CNT,
        BU.BUILDING_ADDRESS,
        BT.B_TYPE
- from BUILDING BU
- left join POLICE_STATION PS
+ from EDU_student.BUILDING BU
+ left join EDU_student.POLICE_STATION PS
  on PS.SERIAL_NUMBER = BU.POLICE_SORT
- left join BUILDING_TYPE BT
+ left join EDU_student.BUILDING_TYPE BT
  on BU.BUILDING_SORT = BT.SERIAL_NUMBER
  where BU.ACCOMMODATE > 1000;
 --實作練習4-4
 select VO.VALLEY, BU.BUILDING_ADDRESS, BU.ACCOMMODATE, PS.PRECINCT, PS.PRICINCT_CALL
- from BUILDING BU
- left join VALLEY_OFFICE VO
+ from EDU_student.BUILDING BU
+ left join EDU_student.VALLEY_OFFICE VO
  on VO.SERIAL_NUMBER = BU.VALLEY_SORT
- left join POLICE_STATION PS
+ left join EDU_student.POLICE_STATION PS
  on BU.POLICE_SORT = PS.SERIAL_NUMBER
  where BU.BUILDING_ADDRESS LIKE '%中%';
 --實作練習4-5
 select VO.VALLEY, VO.OFFICE_ADDRESS, BU.BUILDING_ADDRESS, BU.ACCOMMODATE
- from BUILDING BU
- left join BUILDING_TYPE BT
+ from EDU_student.BUILDING BU
+ left join EDU_student.BUILDING_TYPE BT
  on BU.BUILDING_SORT = BT.SERIAL_NUMBER
- left join VALLEY_office VO
+ left join EDU_student.VALLEY_office VO
  on BU.VALLEY_SORT = VO.SERIAL_NUMBER
  where BT.B_TYPE in ('公寓','大樓') ;
 --實作練習5-1
