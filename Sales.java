@@ -3,17 +3,19 @@ package com.cathaybk.practice.nt50352.b;
 public class Sales extends Employee {
 	private int bonus;
 	private int payments;
-	
-    public Sales() {
-		
+
+	public Sales() {
+
 	}
-	public Sales(String name,String department,int salary,int bonus) {
-		super(name,department,salary);
-		this.bonus = bonus;
+
+	public Sales(String name, String department, int salary, int performance) {
+		super(name, department, salary);
+		this.bonus = (int) (performance * 0.05);
+		this.payments = salary + this.bonus;
 	}
 
 	public int getBonus() {
-		return (int) (bonus*0.05);
+		return bonus;
 	}
 
 	public void setBonus(int bonus) {
@@ -21,15 +23,16 @@ public class Sales extends Employee {
 	}
 
 	public int getPayments() {
-		return super.getSalary()+getBonus();
+		return payments;
 	}
 
 	public void setPayments(int payments) {
 		this.payments = payments;
 	}
-	
+
+	@Override
 	public void printInfo() {
 		super.printInfo();
-		System.out.println("業績獎金:"+ getBonus() + "\n總計:" + getPayments());
+		System.out.println("業績獎金:" + getBonus() + "\n總計:" + getPayments());
 	}
 }

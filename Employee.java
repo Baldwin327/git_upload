@@ -7,7 +7,6 @@ public class Employee implements IWork {
 	private int salary;
 
 	public Employee() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Employee(String name, String department, int salary) {
@@ -42,6 +41,6 @@ public class Employee implements IWork {
 
 	@Override
 	public void printInfo() {
-		System.out.println("薪資單"+"\n姓名:"+ name +" 工作部門:"+ department +"\n月薪:"+ salary);
+		System.out.println("薪資單" + "\n姓名:" + name + " 工作部門:" + department + "\n月薪:" + salary);
 	}
 }
