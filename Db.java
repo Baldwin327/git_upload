@@ -17,20 +17,27 @@ import java.util.Scanner;
 
 public class Db {
 
-	public static final String connUrl = "jdbc:oracle:thin:@//localhost:1521/XE";
+	private static final String DB_CONNECTION_URL = "jdbc:oracle:thin:@//localhost:1521/XE";
 
-	public static final String QUERY_CARS_SQL = "select * from STUDENT.CARS where MANUFACTURER = ? and TYPE = ?";
+	private static final String QUERY_CARSALL_SQL = "select * from STUDENT.CARS";
 
-	public static final String INSERT_CARS_SQL = "insert into STUDENT.CARS (MANUFACTURER, TYPE, MIN_PRICE, PRICE) values (?, ?, ?, ?)";
+	private static final String QUERY_CARS_SQL = "select * from STUDENT.CARS where MANUFACTURER = ? and TYPE = ?";
 
-	public static final String UPDATE_CARS_SQL = "update STUDENT.CARS set PRICE = ?, MIN_PRICE = ? where MANUFACTURER = ? and TYPE = ?";
+	private static final String INSERT_CARS_SQL = "insert into STUDENT.CARS (MANUFACTURER, TYPE, MIN_PRICE, PRICE) values (?, ?, ?, ?)";
 
-	public static final String DELETE_CARS_SQL = "delete from STUDENT.CARS where MANUFACTURER = ? and TYPE = ?";
+	private static final String UPDATE_CARS_SQL = "update STUDENT.CARS set PRICE = ?, MIN_PRICE = ? where MANUFACTURER = ? and TYPE = ?";
+
+	private static final String DELETE_CARS_SQL = "delete from STUDENT.CARS where MANUFACTURER = ? and TYPE = ?";
+
+	private static final String ACCOUNT_NUMBER = "student";
+
+	private static final String PASSWORD = "student123456";
 
 	public static void main(String[] args) {
+		doAllQuery();
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.print("請選擇以下指令輸入:select、insert、update、delete ");
-			String enter = scanner.next();//接收字串
+			String enter = scanner.next();// 接收字串
 
 			switch (enter) {
 			case "select":
@@ -52,9 +59,31 @@ public class Db {
 		}
 	}
 
-	public static void doQuery() {
+	private static void doAllQuery() {
+		try (Connection conn = DriverManager.getConnection(DB_CONNECTION_URL, ACCOUNT_NUMBER, PASSWORD);) {
+			PreparedStatement pstmt = conn.prepareStatement(QUERY_CARSALL_SQL);
+			ResultSet rs = pstmt.executeQuery();
 
-		try (Connection conn = DriverManager.getConnection(connUrl, "student", "student123456");
+			List<Map<String, String>> maplist = new ArrayList<>();
+
+			while (rs.next()) {
+				Map<String, String> map = new HashMap<>();
+				map.put("MANUFACTURER", rs.getString("MANUFACTURER"));
+				map.put("TYPE", rs.getString("TYPE"));
+				map.put("MIN_PRICE", rs.getString("MIN_PRICE"));
+				map.put("PRICE", rs.getString("PRICE"));
+				maplist.add(map);
+			}
+			System.out.println(maplist);
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void doQuery() {
+
+		try (Connection conn = DriverManager.getConnection(DB_CONNECTION_URL, ACCOUNT_NUMBER, PASSWORD);
 				Scanner scanner = new Scanner(System.in);) {// 連線成功
 
 			PreparedStatement pstmt = conn.prepareStatement(QUERY_CARS_SQL);
@@ -85,8 +114,8 @@ public class Db {
 
 	}
 
-	public static void doInsert() {
-		try (Connection conn = DriverManager.getConnection(connUrl, "student", "student123456");
+	private static void doInsert() {
+		try (Connection conn = DriverManager.getConnection(DB_CONNECTION_URL, ACCOUNT_NUMBER, PASSWORD);
 				Scanner scanner = new Scanner(System.in);) {// 第1層TRY-連線成功
 			try {
 				conn.setAutoCommit(false);
@@ -108,11 +137,13 @@ public class Db {
 				pstmt.setString(2, text2);
 				pstmt.setInt(3, int1);
 				pstmt.setInt(4, int2);
-				pstmt.executeUpdate();
-
-				conn.commit();
-				System.out.println("新增成功"); // 第2層TRY-新增成功
-
+				int k = pstmt.executeUpdate();
+				if (k < 1) {
+					System.out.println("新增失敗");
+				} else {
+					conn.commit();
+					System.out.println("新增成功"); // 第2層TRY-新增成功
+				}
 			} catch (Exception e) {
 				System.out.println("新增失敗，原因：" + e.getMessage());
 				try {// 第3層TRY-rollback
@@ -126,8 +157,8 @@ public class Db {
 		}
 	}
 
-	public static void doUpdate() {
-		try (Connection conn = DriverManager.getConnection(connUrl, "student", "student123456");
+	private static void doUpdate() {
+		try (Connection conn = DriverManager.getConnection(DB_CONNECTION_URL, ACCOUNT_NUMBER, PASSWORD);
 				Scanner scanner = new Scanner(System.in);) {// 第1層TRY-連線成功
 			try {
 				conn.setAutoCommit(false);
@@ -149,11 +180,14 @@ public class Db {
 				pstmt.setString(4, text2);
 				pstmt.setInt(2, int1);
 				pstmt.setInt(1, int2);
-				pstmt.executeUpdate();
 
-				conn.commit();
-				System.out.println("更新成功"); // 第2層TRY-更新成功
-
+				int k = pstmt.executeUpdate();
+				if (k < 1) {
+					System.out.println("更新失敗 查無此項");
+				} else {
+					conn.commit();
+					System.out.println("更新成功"); // 第2層TRY-更新成功
+				}
 			} catch (Exception e) {
 				System.out.println("更新失敗，原因：" + e.getMessage());
 				try {// 第3層TRY-rollback
@@ -167,8 +201,8 @@ public class Db {
 		}
 	}
 
-	public static void doDelete() {
-		try (Connection conn = DriverManager.getConnection(connUrl, "student", "student123456");
+	private static void doDelete() {
+		try (Connection conn = DriverManager.getConnection(DB_CONNECTION_URL, ACCOUNT_NUMBER, PASSWORD);
 				Scanner scanner = new Scanner(System.in);) {// 第1層TRY-連線成功
 			try {
 				conn.setAutoCommit(false);
@@ -182,11 +216,13 @@ public class Db {
 
 				pstmt.setString(1, text);
 				pstmt.setString(2, text2);
-				pstmt.executeUpdate();
-
-				conn.commit();
-				System.out.println("刪除成功"); // 第2層TRY-更新成功
-
+				int k = pstmt.executeUpdate();
+				if (k < 1) {
+					System.out.println("刪除失敗 查無此項");
+				} else {
+					conn.commit();
+					System.out.println("刪除成功"); // 第2層TRY-刪除成功
+				}
 			} catch (Exception e) {
 				System.out.println("刪除失敗，原因：" + e.getMessage());
 				try {// 第3層TRY-rollback
