@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class CarsCollection {
 
@@ -28,7 +29,7 @@ public class CarsCollection {
 			List<Map<String, String>> dataList = new ArrayList<>();
 
 			String firstLine = br.readLine();
-			String[] columnNames = firstLine.split(",");// 第1行用逗號分開
+			String[] columnNames = firstLine.split(",");
 
 			String line = br.readLine();
 			while ((line = br.readLine()) != null) {
@@ -40,11 +41,11 @@ public class CarsCollection {
 				dataList.add(dataMap);
 			}
 
-			Collections.sort(dataList, new Comparator<Map<String, String>>() {// 使用比較器
+			Collections.sort(dataList, new Comparator<Map<String, String>>() {
 
-				@Override // 用BigDecimal
-				public int compare(Map<String, String> car1, Map<String, String> car2) {// 每1台車是1個Map
-					BigDecimal price1 = new BigDecimal(car1.get("Price"));// 字串轉BigDecimal
+				@Override 
+				public int compare(Map<String, String> car1, Map<String, String> car2) {
+					BigDecimal price1 = new BigDecimal(car1.get("Price"));
 					BigDecimal price2 = new BigDecimal(car2.get("Price"));
 					return price2.compareTo(price1);
 				}
@@ -60,9 +61,9 @@ public class CarsCollection {
 				for (Map<String, String> dataMap : dataList) {
 					StringBuilder sb = new StringBuilder();
 					for (String column : columnNames) {
-						sb.append(dataMap.get(column));// 拿到MAP中column的value
+						sb.append(dataMap.get(column));
 					}
-					writer.write(sb.toString());// 轉字串
+					writer.write(sb.toString());
 					writer.newLine();
 				}
 
@@ -72,8 +73,8 @@ public class CarsCollection {
 
 			// 6-2題
 			Set<String> manufacturerSet = new TreeSet<>();
-			for (Map<String, String> entry : dataList) {// List裡面的Map屬性
-				String manufacturer = entry.get("Manufacturer");// 拿值
+			for (Map<String, String> entry : dataList) {
+				String manufacturer = entry.get("Manufacturer");
 				manufacturerSet.add(manufacturer);
 			}
 
@@ -82,11 +83,11 @@ public class CarsCollection {
 			BigDecimal TotalPrice = BigDecimal.ZERO;
 			BigDecimal TotalMinPrice = BigDecimal.ZERO;
 
-			for (String brand : manufacturerSet) {// 從第1個品牌開始找
+			for (String brand : manufacturerSet) {
 				BigDecimal SubTotalPrice = BigDecimal.ZERO;
 				BigDecimal SubTotalMinPrice = BigDecimal.ZERO;
 
-				for (Map<String, String> dataMap : dataList) {// 找符合的MAP
+				for (Map<String, String> dataMap : dataList) {
 
 					if (dataMap.get("Manufacturer").equals(brand)) {
 						System.out.printf("%-10s\t%-5s\t%5s\t%5s", dataMap.get("Manufacturer"), dataMap.get("Type"),

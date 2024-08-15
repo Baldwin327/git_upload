@@ -37,7 +37,7 @@ public class Db {
 		doAllQuery();
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.print("請選擇以下指令輸入:select、insert、update、delete ");
-			String enter = scanner.next();// 接收字串
+			String enter = scanner.next();
 
 			switch (enter) {
 			case "select":
@@ -84,7 +84,7 @@ public class Db {
 	private static void doQuery() {
 
 		try (Connection conn = DriverManager.getConnection(DB_CONNECTION_URL, ACCOUNT_NUMBER, PASSWORD);
-				Scanner scanner = new Scanner(System.in);) {// 連線成功
+				Scanner scanner = new Scanner(System.in);) {
 
 			PreparedStatement pstmt = conn.prepareStatement(QUERY_CARS_SQL);
 			System.out.print("請輸入製造商 : ");
@@ -95,7 +95,7 @@ public class Db {
 			pstmt.setString(1, manufacturer);
 			pstmt.setString(2, type);
 
-			ResultSet rs = pstmt.executeQuery();// 查詢結果;
+			ResultSet rs = pstmt.executeQuery();
 			List<Map<String, String>> maplist = new ArrayList<>();
 
 			while (rs.next()) {
@@ -159,7 +159,7 @@ public class Db {
 
 	private static void doUpdate() {
 		try (Connection conn = DriverManager.getConnection(DB_CONNECTION_URL, ACCOUNT_NUMBER, PASSWORD);
-				Scanner scanner = new Scanner(System.in);) {// 第1層TRY-連線成功
+				Scanner scanner = new Scanner(System.in);) {
 			try {
 				conn.setAutoCommit(false);
 				PreparedStatement pstmt = conn.prepareStatement(UPDATE_CARS_SQL);
@@ -186,11 +186,11 @@ public class Db {
 					System.out.println("更新失敗 查無此項");
 				} else {
 					conn.commit();
-					System.out.println("更新成功"); // 第2層TRY-更新成功
+					System.out.println("更新成功"); 
 				}
 			} catch (Exception e) {
 				System.out.println("更新失敗，原因：" + e.getMessage());
-				try {// 第3層TRY-rollback
+				try {
 					conn.rollback();
 				} catch (SQLException sqle) {
 					System.out.println("rollback 失敗，原因：" + sqle.getMessage());
@@ -203,7 +203,7 @@ public class Db {
 
 	private static void doDelete() {
 		try (Connection conn = DriverManager.getConnection(DB_CONNECTION_URL, ACCOUNT_NUMBER, PASSWORD);
-				Scanner scanner = new Scanner(System.in);) {// 第1層TRY-連線成功
+				Scanner scanner = new Scanner(System.in);) {
 			try {
 				conn.setAutoCommit(false);
 				PreparedStatement pstmt = conn.prepareStatement(DELETE_CARS_SQL);
@@ -221,11 +221,11 @@ public class Db {
 					System.out.println("刪除失敗 查無此項");
 				} else {
 					conn.commit();
-					System.out.println("刪除成功"); // 第2層TRY-刪除成功
+					System.out.println("刪除成功"); 
 				}
 			} catch (Exception e) {
 				System.out.println("刪除失敗，原因：" + e.getMessage());
-				try {// 第3層TRY-rollback
+				try {
 					conn.rollback();
 				} catch (SQLException sqle) {
 					System.out.println("rollback 失敗，原因：" + sqle.getMessage());

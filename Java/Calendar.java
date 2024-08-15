@@ -13,7 +13,7 @@ public class Calendar {
 
 	public static void main(String[] args) {
 		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.print("輸入介於1-12的整數m : ");// 檢查其他數字
+			System.out.print("輸入介於1-12的整數m : ");
 			int year = LocalDate.now().getYear();
 			int month = scanner.nextInt();
 			if (month >= 1 && month <= 12) {

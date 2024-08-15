@@ -19,22 +19,21 @@ public class RandomLotto {
 		Set<Integer> results = new HashSet<>();
 		Random random = new Random();
 
-		while (results.size() < 6) { // 6個數字
-			int n = random.nextInt(49) + 1;// 產生1-49
+		while (results.size() < 6) { 
+			int n = random.nextInt(49) + 1;
 			results.add(n);
 		}
 
 		System.out.print("排序前 ");
-		for (Integer number : results) {// 取值
+		for (Integer number : results) {
 			System.out.print(" " + number);
 		}
 
 		Set<Integer> results2 = new TreeSet<>(results);
 
 		System.out.print("\n排序後 ");
-		for (Integer number : results2) {// 取值
+		for (Integer number : results2) {
 			System.out.print(" " + number);
 		}
-
 	}
 }

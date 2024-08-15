@@ -18,16 +18,14 @@ public class BufferWriter {
 			employee.printInfo();
 		}
 
-		// 路徑
 		String filePath = "C:\\Users\\Admin\\Desktop\\Java 班\\git_upload\\output.csv";
 
-		// BufferWriter
 		try (BufferedWriter writer = new BufferedWriter(
 				new OutputStreamWriter(new FileOutputStream(filePath, true), "UTF-8"))) {
 
-			writer.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF }));// 亂碼修正
+			writer.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF }));
 
-			// List裡的員工資料
+			
 			for (Employee employee : employeeList) {
 				writer.write(employee.getName()+",");
 				if (employee instanceof Sales) {
