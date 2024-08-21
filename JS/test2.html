@@ -25,9 +25,9 @@
         }
     </style>
     <script type="text/javascript">
+
         window.onload = function () {
             let nextId = 1;
-
             //新增
             document.getElementById('add').onclick = function () {
                 const manufacturer = document.getElementById('manufacturer').value;
@@ -99,7 +99,7 @@
             });
 
             //radio
-            document.addEventListener('change', function (event) {
+            document.addEventListener('click', function (event) {
                 if (event.target.name === 'rowSelect') {
                     const row = event.target.parentNode.parentNode;
                     document.getElementById('manufacturer').value = row.cells[2].innerText;
