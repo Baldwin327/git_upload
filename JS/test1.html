@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8>
+    <style>
+        .text1 {
+            display: inline-block;
+            text-align: left;
+            width: 100px;
+        }
+
+        .text2 {
+            display: inline-block;
+            text-align: left;
+            width: 100px;
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 20px;
+        }
+    </style>
+    <script type="text/javascript" src="HashMap.js"></script>
+    <script type="text/javaScript">
+
+    window.onload = function(){
+        const map = new HashMap();
+
+        //PUT
+        document.getElementById('put').onclick = function(){
+           const key = document.getElementById('key').value;
+           const value = document.getElementById('value').value;
+
+
+           
+           if(key === ''){
+              alert('請輸入KEY');
+           }else if(map.contains(key)){
+              alert('KEY值重複 請重新輸入');
+           }else{
+            map.put(key,value);
+            printResult();
+           }
+           
+        }
+
+        //CLEAR
+        document.getElementById('clear').onclick = function(){
+            map.clear();
+            document.getElementById('key').value = '';
+            document.getElementById('value').value = '';
+            document.getElementById('result').innerHTML = '[RESULT]';
+        }
+
+        //RESULT顯示
+        function printResult(){
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('result').innerHTML = '[RESULT]';
+            for(let k of map.keys()){
+                const value = map.get(k);
+                document.getElementById('result').innerHTML += `<p>${k} : ${value}</p>`
+            }
+
+        }
+    };
+    </script>
+</head>
+
+<body bgcolor="F0FFFF">
+    <span class="text1">KEY</span><input type="text" id="key" /><br>
+    <span class="text2">VALUE</span><input type="text" id="value" /><br>
+    <hr width="350px" align="left">
+    <button id='put'>PUT</button>
+    <button id='clear' style="margin-left: 15px;">CLEAR</button>
+    <hr width="350px" align="left">
+    <p id="result">[RESULT]</p>
+</body>
+
+</html>

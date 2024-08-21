@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8>
+    <style>
+        td {
+            padding: 15px;
+        }
+
+        tr {
+            height: 50px;
+        }
+
+        table {
+            margin-top: 20px;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            let nextId = 1;
+
+            //新增
+            document.getElementById('add').onclick = function () {
+                const manufacturer = document.getElementById('manufacturer').value;
+                const category = document.getElementById('category').value;
+                const minPrice = document.getElementById('minPrice').value;
+                const price = document.getElementById('price').value;
+
+                if (manufacturer === '' || category === '') {
+                    alert('製造商、類別不能為空白');
+                    return;
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td><input type="radio" name="rowSelect"></td>
+                    <td>${nextId}</td>
+                    <td>${manufacturer}</td>
+                    <td>${category}</td>
+                    <td>${minPrice}</td>
+                    <td>${price}</td>
+                    <td><button class ='delete'>刪除</button></td>`
+                        ;
+                    document.getElementById('tbody').appendChild(row);
+                    nextId++;
+                    clearInputs();
+                }
+            };
+
+            //修改
+            document.getElementById('modify').onclick = function () {
+                const selectedRadio = document.querySelector('input[type="radio"]:checked');
+                if (!selectedRadio) {
+                    alert('請點選一行修改');
+                    return;
+                }
+
+                const manufacturer = document.getElementById('manufacturer').value;
+                const category = document.getElementById('category').value;
+                const minPrice = document.getElementById('minPrice').value;
+                const price = document.getElementById('price').value;
+
+                if (manufacturer === '' || category === '') {
+                    alert('製造商、類別不能為空白');
+                    return;
+                }
+                const row = selectedRadio.parentNode.parentNode;
+                row.cells[2].innerText = manufacturer;
+                row.cells[3].innerText = category;
+                row.cells[4].innerText = minPrice;
+                row.cells[5].innerText = price;
+                clearInputs();
+
+            };
+
+            //清空
+            document.getElementById('clear').onclick = function () {
+                clearInputs();
+                clearTable();
+            };
+
+
+            //刪除
+            document.addEventListener('click', function (event) {
+                if (event.target.classList.contains('delete')) {
+                    const row = event.target.parentNode.parentNode;
+                    document.getElementById('tbody').removeChild(row);
+                    updateRowIds();
+                }
+
+            });
+
+            //radio
+            document.addEventListener('change', function (event) {
+                if (event.target.name === 'rowSelect') {
+                    const row = event.target.parentNode.parentNode;
+                    document.getElementById('manufacturer').value = row.cells[2].innerText;
+                    document.getElementById('category').value = row.cells[3].innerText;
+                    document.getElementById('minPrice').value = row.cells[4].innerText;
+                    document.getElementById('price').value = row.cells[5].innerText;
+                }
+            });
+
+            function clearInputs() {
+                document.getElementById('manufacturer').value = '';
+                document.getElementById('category').value = '';
+                document.getElementById('minPrice').value = '';
+                document.getElementById('price').value = '';
+            };
+
+            function updateRowIds() {
+                let rows = document.getElementById('tbody').getElementsByTagName('tr');
+                let currentId = 1;
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].cells[1].innerText = currentId;
+                    currentId++;
+                }
+                //更新下個id
+                nextId = currentId;
+            };
+
+            function clearTable() {
+                const table = document.getElementById('tbody');
+                while (table.firstChild) {
+                    table.removeChild(table.firstChild);
+                }
+                // Reset nextId to 1
+                nextId = 1;
+            };
+        };
+
+    </script>
+
+</head>
+
+<body bgcolor="F0FFFF">
+    <table border="1">
+        <tr>
+            <td width="80px" align="center">製造商</td>
+            <td><input type="text" id="manufacturer"></td>
+            <td width="50px" align="center">類別</td>
+            <td><input type="text" id="category"></td>
+        </tr>
+        <tr>
+            <td align="center">底價</td>
+            <td><input type="text" id="minPrice"></td>
+            <td align="center">售價</td>
+            <td><input type="text" id="price"></td>
+        </tr>
+        <tr>
+            <td colspan="4" align="center">
+                <button id="add">新增</button>
+                <button id="modify">修改</button>
+                <button id="clear">清空</button>
+            </td>
+        </tr>
+    </table>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th width="30px"></th>
+                <th width="50px">序號</th>
+                <th width="50px">製造商</th>
+                <th width="50px">類別</th>
+                <th width="50px">底價</th>
+                <th width="50px">售價</th>
+                <th width="30px"></th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+    </table>
+</body>
+
+</html>
