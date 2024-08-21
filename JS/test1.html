@@ -30,20 +30,19 @@
 
         //PUT
         document.getElementById('put').onclick = function(){
-           const key = document.getElementById('key').value;
-           const value = document.getElementById('value').value;
+           const key = document.getElementById('key').value.trim();
+           const value = document.getElementById('value').value.trim();
 
-
-           
-           if(key === ''){
-              alert('請輸入KEY');
-           }else if(map.contains(key)){
-              alert('KEY值重複 請重新輸入');
-           }else{
-            map.put(key,value);
-            printResult();
-           }
-           
+        if (!key) {
+            alert('請輸入正確KEY值');
+          }else{
+            if(map.contains(key)){
+                alert('KEY值重複 請重新輸入');
+             }else{
+                map.put(key,value);
+                printResult();
+             }
+          }
         }
 
         //CLEAR

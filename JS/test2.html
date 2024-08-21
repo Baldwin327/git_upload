@@ -16,11 +16,11 @@
             margin-top: 20px;
         }
 
-        thead{
-            background: #f5cba7 ;
+        thead {
+            background: #f5cba7;
         }
 
-        button{
+        button {
             background: #f5cba7;
         }
     </style>
@@ -28,15 +28,26 @@
 
         window.onload = function () {
             let nextId = 1;
-            
+
+            const manufacturerInput = document.getElementById('manufacturer');
+            const categoryInput = document.getElementById('category');
+            const minPriceInput = document.getElementById('minPrice');
+            const priceInput = document.getElementById('price');
+
+            function getFormValues() {
+                return {
+                    manufacturer: manufacturerInput.value,
+                    category: categoryInput.value,
+                    minPrice: minPriceInput.value,
+                    price: priceInput.value
+                };
+            }
+
             //新增
             document.getElementById('add').onclick = function () {
-                const manufacturer = document.getElementById('manufacturer').value;
-                const category = document.getElementById('category').value;
-                const minPrice = document.getElementById('minPrice').value;
-                const price = document.getElementById('price').value;
+                const { manufacturer, category, minPrice, price } = getFormValues();
 
-                if (manufacturer === '' || category === '') {
+                if (!manufacturer || !category) {
                     alert('製造商、類別不能為空白');
                     return;
                 } else {
@@ -64,12 +75,9 @@
                     return;
                 }
 
-                const manufacturer = document.getElementById('manufacturer').value;
-                const category = document.getElementById('category').value;
-                const minPrice = document.getElementById('minPrice').value;
-                const price = document.getElementById('price').value;
+                const { manufacturer, category, minPrice, price } = getFormValues();
 
-                if (manufacturer === '' || category === '') {
+                if (!manufacturer || !category) {
                     alert('製造商、類別不能為空白');
                     return;
                 }
@@ -101,21 +109,24 @@
 
             //radio
             document.addEventListener('click', function (event) {
+
                 if (event.target.name === 'rowSelect') {
                     const row = event.target.parentNode.parentNode;
-                    document.getElementById('manufacturer').value = row.cells[2].innerText;
-                    document.getElementById('category').value = row.cells[3].innerText;
-                    document.getElementById('minPrice').value = row.cells[4].innerText;
-                    document.getElementById('price').value = row.cells[5].innerText;
+                    manufacturerInput.value = row.cells[2].innerText;
+                    categoryInput.value = row.cells[3].innerText;
+                    minPriceInput.value = row.cells[4].innerText;
+                    priceInput.value = row.cells[5].innerText;
                 }
             });
 
             function clearInputs() {
-                document.getElementById('manufacturer').value = '';
-                document.getElementById('category').value = '';
-                document.getElementById('minPrice').value = '';
-                document.getElementById('price').value = '';
+                manufacturerInput.value = '';
+                categoryInput.value = '';
+                minPriceInput.value = '';
+                priceInput.value = '';
             };
+
+
 
             function updateRowIds() {
                 let rows = document.getElementById('tbody').getElementsByTagName('tr');
